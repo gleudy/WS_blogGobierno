@@ -9,8 +9,10 @@ const pool = mysql.createPool({
     password: '',
     database: 'blog',
     charset: 'utf8mb4'
-});
+}); 
+const salvandoDatos=(dt)=>{
 
+}
 function grabando(lineas) {
     const datos = {
         titulo: lineas.titulo,
