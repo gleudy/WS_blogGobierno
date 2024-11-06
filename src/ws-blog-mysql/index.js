@@ -3,16 +3,27 @@ const cheerio = require('cheerio');
 const mysql = require('mysql');
 
 const pool = mysql.createPool({
-    connectionLimit: 10,
+    connectionLimit: 25,
     host: 'localhost',
     user: 'root',
     password: '',
     database: 'blog',
     charset: 'utf8mb4'
-}); 
-const salvandoDatos=(dt)=>{
+});
+const salvandoDatos = (dt) => {
+    pool.getConnection(function (err, connection) {
+        if (err) throw err;
+        connection.query('INSERT INTO noticias set ?', dt, function (error, result, fields) {
+            console.log('Registrando noticias');
+            connection.release();
+
+            if (error) throw error;
+        })
+
+    })
 
 }
+
 function grabando(lineas) {
     const datos = {
         titulo: lineas.titulo,
@@ -21,14 +32,17 @@ function grabando(lineas) {
     }
     pool.getConnection(function (err, connection) {
         if (err) throw err;
-        connection.query('INSERT INTO noticias set ?', datos, function (error, result, fields) {
-            console.log(datos);
-            connection.release();
-
+        connection.query('select * from `noticias` where `titulo`=?', datos.titulo, function (error, result, fields) {
+            let countResult = result.length
+            if (countResult === 0) {
+               salvandoDatos(datos);
+            } else {
+                console.log('Titulo registrado :-)')
+            }
             if (error) throw error;
-        })
-
+        });
     })
+
 }
 
 const url = 'https://www.gov.br/compras/pt-br/acesso-a-informacao/noticias';
@@ -71,3 +85,7 @@ async function main() {
 }
 
 main();
+
+setTimeout(() => {
+    pool.end();
+}, 50000);
