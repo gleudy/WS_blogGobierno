@@ -1,0 +1,10 @@
+{
+    "workbench.statusBar.visible": true,
+    "workbench.tips.enabled": true,
+    "workbench.tree.enableStickyScroll": true,
+    "workbench.tree.renderIndentGuides": "onHover",
+    "workbench.view.alwaysShowHeaderActions": false,
+    "breadcrumbs.enabled": true,
+    "breadcrumbs.icons": true,
+    "breadcrumbs.showArrays": true
+}
